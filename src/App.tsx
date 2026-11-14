@@ -1,32 +1,80 @@
-// STARTING POINT: the sample Task Manager (state in App with useReducer, passed down as props).
-// Assignment 3: change the state shape, add actions, add a filter bar (see the handout).
 import { useReducer } from 'react'
-import { initialState, taskReducer, type Task, type Action } from './taskReducer'
-import TaskRow from './TaskRow'
 import type { Dispatch } from 'react'
+import { initialState, taskReducer } from './taskReducer'
+import type { Action, Filter, Task } from './taskReducer'
+import { countByFilter, FILTERS, filterTasks } from './filter'
+import TaskRow from './TaskRow'
+
+const FILTER_LABELS: Record<Filter, string> = {
+  all: 'All',
+  todo: 'To do',
+  'in-progress': 'In progress',
+  done: 'Done',
+}
 
 function AddForm({ dispatch }: { dispatch: Dispatch<Action> }) {
   function addTask(formData: FormData) {
     const title = String(formData.get('title') ?? '').trim()
     if (title) dispatch({ type: 'add', id: crypto.randomUUID(), title })
   }
+
   return (
-    <form action={addTask}>
-      <input name="title" placeholder="New task" />
-      <button type="submit">Add</button>
+    <form className="add-form" action={addTask}>
+      <input
+        name="title"
+        placeholder="What needs to be done?"
+        aria-label="New task title"
+      />
+      <button type="submit">Add task</button>
     </form>
   )
 }
 
-function TaskList({ tasks, dispatch }: { tasks: Task[]; dispatch: Dispatch<Action> }) {
+function FilterBar({
+  filter,
+  counts,
+  dispatch,
+}: {
+  filter: Filter
+  counts: Record<Filter, number>
+  dispatch: Dispatch<Action>
+}) {
   return (
-    <ul>
-      {tasks.map((t) => (
+    <div className="filter-bar" role="group" aria-label="Filter tasks">
+      {FILTERS.map((value) => (
+        <button
+          key={value}
+          type="button"
+          className={filter === value ? 'filter active' : 'filter'}
+          aria-pressed={filter === value}
+          onClick={() => dispatch({ type: 'setFilter', filter: value })}
+        >
+          {FILTER_LABELS[value]} ({counts[value]})
+        </button>
+      ))}
+    </div>
+  )
+}
+
+function TaskList({
+  tasks,
+  dispatch,
+}: {
+  tasks: Task[]
+  dispatch: Dispatch<Action>
+}) {
+  if (tasks.length === 0) {
+    return <p className="empty">No tasks here.</p>
+  }
+
+  return (
+    <ul className="task-list">
+      {tasks.map((task) => (
         <TaskRow
-          key={t.id}
-          task={t}
-          onNext={() => dispatch({ type: 'advance', id: t.id })}
-          onDelete={() => dispatch({ type: 'remove', id: t.id })}
+          key={task.id}
+          task={task}
+          onNext={() => dispatch({ type: 'advance', id: task.id })}
+          onDelete={() => dispatch({ type: 'remove', id: task.id })}
         />
       ))}
     </ul>
@@ -35,14 +83,36 @@ function TaskList({ tasks, dispatch }: { tasks: Task[]; dispatch: Dispatch<Actio
 
 export default function App() {
   const [state, dispatch] = useReducer(taskReducer, initialState)
+
+  // Derived while rendering: never stored in state.
+  const visibleTasks = filterTasks(state.tasks, state.filter)
+  const counts = countByFilter(state.tasks)
+
   return (
-    <main>
-      <h1>Task Manager</h1>
+    <main className="app">
+      <header className="app-header">
+        <h1>Task Manager</h1>
+        <p>Add tasks, move them along, and filter the list.</p>
+      </header>
+
       <AddForm dispatch={dispatch} />
-      <button type="button" onClick={() => dispatch({ type: 'clearDone' })}>
-        Clear done
-      </button>
-      <TaskList tasks={state.tasks} dispatch={dispatch} />
+
+      <div className="toolbar">
+        <FilterBar
+          filter={state.filter}
+          counts={counts}
+          dispatch={dispatch}
+        />
+        <button
+          type="button"
+          className="clear-done"
+          onClick={() => dispatch({ type: 'clearDone' })}
+        >
+          Clear done
+        </button>
+      </div>
+
+      <TaskList tasks={visibleTasks} dispatch={dispatch} />
     </main>
   )
 }

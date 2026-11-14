@@ -1,0 +1,239 @@
+:root {
+  color-scheme: light;
+  --ink: #1b2a41;
+  --muted: #5b6b80;
+  --rule: #dde5ef;
+  --wash: #f4f7fb;
+  --accent: #1a58a5;
+  --accent-dark: #13427c;
+  --todo-bg: #e4eaf2;
+  --todo-ink: #3c4d64;
+  --wip-bg: #ffedc7;
+  --wip-ink: #6e3c00;
+  --done-bg: #d6f0de;
+  --done-ink: #115228;
+  font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial,
+    sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, #e7f0fb 0, transparent 42%),
+    var(--wash);
+  color: var(--ink);
+}
+
+#root {
+  padding: 2.5rem 1rem 4rem;
+}
+
+.app {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 2rem 2rem 1.5rem;
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 16px;
+  box-shadow: 0 24px 60px -36px rgba(27, 42, 65, 0.5);
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+}
+
+.app-header p {
+  margin: 0.35rem 0 1.5rem;
+  color: var(--muted);
+}
+
+.add-form {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.add-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+}
+
+.add-form input:focus {
+  outline: 3px solid rgba(26, 88, 165, 0.18);
+  border-color: var(--accent);
+}
+
+button {
+  padding: 0.62rem 0.85rem;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font: 600 0.92rem/1 "Segoe UI", system-ui, sans-serif;
+  cursor: pointer;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.add-form button {
+  background: var(--accent);
+  color: #fff;
+}
+
+.add-form button:hover {
+  background: var(--accent-dark);
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+  padding: 0.9rem 0 1rem;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.filter {
+  background: #fff;
+  border-color: var(--rule);
+  color: var(--muted);
+}
+
+.filter:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.filter.active,
+.filter.active:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.clear-done {
+  background: #fff;
+  border-color: var(--rule);
+  color: #b42318;
+}
+
+.clear-done:hover {
+  background: #fef3f2;
+  border-color: #d92d20;
+}
+
+.task-list {
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.task-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto auto;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.8rem 0.2rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.task-row:last-child {
+  border-bottom: 0;
+}
+
+.task-title {
+  overflow-wrap: anywhere;
+}
+
+.badge {
+  padding: 0.36rem 0.55rem;
+  border-radius: 999px;
+  font: 700 0.72rem/1 "Segoe UI", system-ui, sans-serif;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.badge.todo {
+  background: var(--todo-bg);
+  color: var(--todo-ink);
+}
+
+.badge.in-progress {
+  background: var(--wip-bg);
+  color: var(--wip-ink);
+}
+
+.badge.done {
+  background: var(--done-bg);
+  color: var(--done-ink);
+}
+
+.next {
+  background: #eef4fc;
+  color: var(--accent);
+}
+
+.next:hover {
+  background: #dceafb;
+}
+
+.delete {
+  background: #fff;
+  border-color: #f2c6c2;
+  color: #b42318;
+}
+
+.delete:hover {
+  background: #fef3f2;
+}
+
+.empty {
+  margin: 1.6rem 0 0.8rem;
+  padding: 1.5rem;
+  border: 1px dashed var(--rule);
+  border-radius: 10px;
+  background: var(--wash);
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (max-width: 34rem) {
+  #root {
+    padding: 1rem 0.75rem 2rem;
+  }
+
+  .app {
+    padding: 1.25rem;
+  }
+
+  .task-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .task-title {
+    grid-column: 1 / -1;
+  }
+}
