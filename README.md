@@ -84,6 +84,16 @@ Output of `npm test`:
    Duration  252ms (transform 44%, import 41%, tests 9%, worker 5%)
 ```
 
+## Bonus 3: Explain your reducer
+
+A reducer must be pure because React compares the returned value with the previous one to decide what changed. If it mutates the old state and returns the same object, the references are identical, so React can skip the update and show stale data. Mutation would also break undo, because `past` would point at arrays that keep changing. A pure reducer takes the old state, returns a new object, and leaves the old one untouched; that makes it predictable and easy to test.
+
+The caller creates the id with `crypto.randomUUID()` because the reducer must produce the same result for the same input. If the reducer generated it, two calls with the same action could produce different tasks. React may call a reducer twice in StrictMode to check purity, so generating the id inside would be a bug. The event handler creates the id once and puts it in the action.
+
+The filtered list and counts are derived while rendering because they are not independent facts; they are calculated from `tasks` and `filter`. Storing them creates a second source of truth. For example, if `counts` were stored and I deleted a done task while the Done filter was active, `tasks` would lose it but the stored count could still say `Done (1)`, so the screen would contradict itself. Recomputing from `tasks` makes that impossible.
+
+Moving the filter into the reducer instead of a separate `useState` made the state easier to reason about: one `dispatch({ type: 'setFilter' })` updates the filter through the same rulebook as every other change, and `undo` can leave the filter alone. The harder part is that every task-changing action now copies the state object and remembers history, so the reducer has more responsibilities than the sample.
+
 ## Bonus 4: Git repository
 
 https://github.com/olcanaskar/mis233-assignment3
