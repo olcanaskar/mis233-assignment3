@@ -103,13 +103,23 @@ export default function App() {
           counts={counts}
           dispatch={dispatch}
         />
-        <button
-          type="button"
-          className="clear-done"
-          onClick={() => dispatch({ type: 'clearDone' })}
-        >
-          Clear done
-        </button>
+        <div className="history-actions">
+          <button
+            type="button"
+            className="undo"
+            onClick={() => dispatch({ type: 'undo' })}
+            disabled={state.past.length === 0}
+          >
+            Undo
+          </button>
+          <button
+            type="button"
+            className="clear-done"
+            onClick={() => dispatch({ type: 'clearDone' })}
+          >
+            Clear done
+          </button>
+        </div>
       </div>
 
       <TaskList tasks={visibleTasks} dispatch={dispatch} />

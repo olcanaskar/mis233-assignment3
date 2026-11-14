@@ -93,6 +93,11 @@ button {
   color: #fff;
 }
 
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .add-form button:hover {
   background: var(--accent-dark);
 }
@@ -133,13 +138,29 @@ button {
   color: #fff;
 }
 
+.history-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.undo {
+  background: #fff;
+  border-color: var(--rule);
+  color: var(--accent);
+}
+
+.undo:hover:not(:disabled) {
+  background: #eef4fc;
+  border-color: var(--accent);
+}
+
 .clear-done {
   background: #fff;
   border-color: var(--rule);
   color: #b42318;
 }
 
-.clear-done:hover {
+.clear-done:hover:not(:disabled) {
   background: #fef3f2;
   border-color: #d92d20;
 }
