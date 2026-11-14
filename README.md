@@ -14,10 +14,11 @@ A small Task Manager built with Vite, React and TypeScript. All state lives in
 npm install
 npm run dev
 npm run build
+npm test
 ```
 
 `npm run build` runs TypeScript in strict mode and then the Vite production
-build.
+build. `npm test` runs the Vitest suite.
 
 ## What the app does
 
@@ -39,6 +40,8 @@ build.
 src/
   taskReducer.ts   State, Action, Filter, initialState and taskReducer (with undo)
   filter.ts        filterTasks and countByFilter (pure, no React)
+  taskReducer.test.ts  reducer tests: actions, undo, purity, edge cases
+  filter.test.ts       tests for filterTasks and countByFilter
   TaskRow.tsx      one row: title, status, Next, Delete
   App.tsx          useReducer, AddForm, FilterBar, TaskList
   styles.css       layout and status colours
@@ -62,6 +65,24 @@ report an error if an action is added without a case.
 ## Bonus 1: Undo
 
 The state is `{ tasks, filter, past }`, where `past` is a `Task[][]` stack of the task lists before each task-changing action. `add`, `advance`, `remove` and `clearDone` push the old list; `setFilter` does not. `undo` pops the most recent list back into `tasks`, and the Undo button is disabled while `past` is empty.
+
+## Bonus 2: Tests
+
+The Vitest suite covers every reducer action, three advances returning a task to `todo`, the undo history, immutability (the state is frozen with `Object.freeze`), `filterTasks` and `countByFilter`, and edge cases such as an unknown id, an empty list, `clearDone` with nothing done, and counts after a delete.
+
+Output of `npm test`:
+
+```text
+> task-manager-assignment3@0.0.0 test
+> vitest run
+
+ RUN  v5.1.0 C:/Projects/assignment3
+
+ Test Files  2 passed (2)
+      Tests  26 passed (26)
+   Start at  23:53:23
+   Duration  252ms (transform 44%, import 41%, tests 9%, worker 5%)
+```
 
 ## Bonus 4: Git repository
 
