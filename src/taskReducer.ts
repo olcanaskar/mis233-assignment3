@@ -1,5 +1,5 @@
 // Olcan Askar
-// Student number: <fill in>
+// Student number: 2024502180
 //
 // Assignment 3: Task Manager with a Reducer
 // The reducer is a pure function: it never mutates the state it receives.
