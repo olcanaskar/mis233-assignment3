@@ -1,7 +1,6 @@
 # Assignment 3 — Task Manager with a Reducer
 
-**Olcan Askar**  
-Student number: `<fill in>`
+**Olcan Askar** 
 
 MIS 233 Web Based Application Programming, Fall 2026, Week 5.
 
