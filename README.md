@@ -97,7 +97,7 @@ Moving the filter into the reducer instead of a separate `useState` made the sta
 
 https://github.com/olcanaskar/mis233-assignment3
 
-The repository is private; the instructor needs to be added as a collaborator.
+The repository is public, so the instructor can open the link directly.
 
 ## Screenshots
 
