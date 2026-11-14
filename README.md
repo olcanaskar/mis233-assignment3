@@ -25,6 +25,7 @@ build.
   `crypto.randomUUID()`.
 - `Next` advances a task: `todo` → `in-progress` → `done` → `todo`.
 - `Delete` removes one task.
+- `Undo` reverts the last change to the task list.
 - The filter bar shows **All**, **To do**, **In progress** and **Done**, each
   with the number of tasks it would show.
 - `Clear done` removes every task whose status is `done` and keeps the current
@@ -36,7 +37,7 @@ build.
 
 ```
 src/
-  taskReducer.ts   State, Action, Filter, initialState and taskReducer
+  taskReducer.ts   State, Action, Filter, initialState and taskReducer (with undo)
   filter.ts        filterTasks and countByFilter (pure, no React)
   TaskRow.tsx      one row: title, status, Next, Delete
   App.tsx          useReducer, AddForm, FilterBar, TaskList
@@ -47,14 +48,20 @@ screenshots/       one screenshot per filter
 ## State and actions
 
 ```ts
-type State = { tasks: Task[]; filter: Filter }
+type State = { tasks: Task[]; filter: Filter; past: Task[][] }
 ```
 
-Actions: `add`, `advance`, `remove`, `setFilter`, `clearDone`. The reducer copies
-the state object and only replaces the arrays or task objects that change, so
-the previous state is never mutated. Every action type is handled in the
-`switch`; the `never` check in the `default` branch makes TypeScript report an
-error if an action is added without a case.
+Actions: `add`, `advance`, `remove`, `setFilter`, `clearDone`, `undo`. The reducer
+copies the state object and only replaces the arrays or task objects that
+change, so the previous state is never mutated. Every action that changes
+`tasks` pushes the old task list onto `past`; `setFilter` does not. `undo` pops
+the last list back and leaves the filter unchanged. Every action type is handled
+in the `switch`; the `never` check in the `default` branch makes TypeScript
+report an error if an action is added without a case.
+
+## Bonus 1: Undo
+
+The state is `{ tasks, filter, past }`, where `past` is a `Task[][]` stack of the task lists before each task-changing action. `add`, `advance`, `remove` and `clearDone` push the old list; `setFilter` does not. `undo` pops the most recent list back into `tasks`, and the Undo button is disabled while `past` is empty.
 
 ## Bonus 4: Git repository
 
