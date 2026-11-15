@@ -1,4 +1,4 @@
-// Olcan Askar
+// Abdullah Olcan Askar
 // Student number: 2024502180
 //
 // Assignment 3: Task Manager with a Reducer
